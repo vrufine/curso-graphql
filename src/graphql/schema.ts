@@ -23,6 +23,11 @@ export default makeExecutableSchema({
     }
   `,
   resolvers: {
+    User: {
+      name (parent) {
+        return `Nome do usuário: ${parent.name}` // resolver trivial
+      }
+    },
     Query: {
       allUsers () {
         return users;
