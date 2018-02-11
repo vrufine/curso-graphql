@@ -1,1 +1,1 @@
-console.log("Ok");
+let ok = true;
