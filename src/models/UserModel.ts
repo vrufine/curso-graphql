@@ -1,4 +1,5 @@
 import * as Sequelize from 'sequelize';
+import { hashSync, genSaltSync, compareSync } from 'bcryptjs';
 import { BaseModelInterface } from '../interfaces/BaseModelInterface';
 
 export interface UserAttributes {
@@ -15,7 +16,7 @@ export interface UserInstance extends UserAttributes, Sequelize.Instance<UserAtt
   isPassword(encodedPassword: string, password: string): boolean;
 };
 
-export interface UserModel extends BaseModelInterface, Sequelize.Model<UserInstance,UserAttributes> {};
+export interface UserModel extends BaseModelInterface, Sequelize.Model<UserInstance, UserAttributes> { };
 
 export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes): UserModel => {
   const User: UserModel = sequelize.define('User', {
@@ -51,6 +52,18 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
       allowNull: true,
       defaultValue: true
     }
-  });
+  }, {
+      tableName: 'users',
+      hooks: {
+        beforeCreate(user: UserInstance, options?: Sequelize.CreateOptions): void {
+          const salt = genSaltSync();
+          user.password = hashSync(user.password, salt);
+        }
+      }
+    }
+  );
+  User.protoype.isPassword = (encodedPassword: string, password: string): boolean => {
+    return compareSync(encodedPassword, password);
+  }
   return User;
 };
