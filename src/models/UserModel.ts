@@ -50,7 +50,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
         length: 'long'
       }),
       allowNull: true,
-      defaultValue: true
+      defaultValue: null
     }
   }, {
     tableName: 'users',
@@ -61,7 +61,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
       }
     }
   });
-  User.protoype.isPassword = (encodedPassword: string, password: string): boolean => {
+  User.prototype.isPassword = (encodedPassword: string, password: string): boolean => {
     return compareSync(encodedPassword, password);
   }
   return User;
