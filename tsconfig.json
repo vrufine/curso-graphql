@@ -5,8 +5,7 @@
     "lib": [
       "esnext"
     ],
-    "module": "commonjs",
-    "outDir": "dist"
+    "module": "commonjs"
   },
   "include": [
     "src/**/*.ts"
