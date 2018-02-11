@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^9.4.5",
+    "@types/typescript": "^2.0.0",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.4.0",
     "gulp-typescript": "^4.0.1",
