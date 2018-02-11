@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node_modules/.bin/nodemon --delay 5 dist/app",
+    "dev": "node_modules/.bin/nodemon --delay 5 ./dist",
     "gulp": "node_modules/.bin/gulp"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/express": "^4.11.1",
     "@types/node": "^9.4.5",
     "@types/typescript": "^2.0.0",
     "gulp": "^3.9.1",
@@ -18,5 +19,8 @@
     "gulp-typescript": "^4.0.1",
     "nodemon": "^1.14.12",
     "typescript": "^2.7.1"
+  },
+  "dependencies": {
+    "express": "^4.16.2"
   }
 }
