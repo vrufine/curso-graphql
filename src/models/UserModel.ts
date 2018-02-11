@@ -53,15 +53,14 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
       defaultValue: true
     }
   }, {
-      tableName: 'users',
-      hooks: {
-        beforeCreate(user: UserInstance, options?: Sequelize.CreateOptions): void {
-          const salt = genSaltSync();
-          user.password = hashSync(user.password, salt);
-        }
+    tableName: 'users',
+    hooks: {
+      beforeCreate(user: UserInstance, options?: Sequelize.CreateOptions): void {
+        const salt = genSaltSync();
+        user.password = hashSync(user.password, salt);
       }
     }
-  );
+  });
   User.protoype.isPassword = (encodedPassword: string, password: string): boolean => {
     return compareSync(encodedPassword, password);
   }
