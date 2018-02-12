@@ -1,6 +1,7 @@
 import { GraphQLResolveInfo } from "graphql";
 import { DbConnetion } from "../../../interfaces/DbConnectionInterface";
 import { PostInstance } from "../../../models/PostModel";
+import { Transaction } from "sequelize";
 
 export const postResolvers = {
   Post: {
@@ -51,5 +52,47 @@ export const postResolvers = {
         });
     }
   },
-  Mutation: {}
+  Mutation: {
+    createPost(
+      parent,
+      { input },
+      { db }: { db: DbConnetion },
+      info: GraphQLResolveInfo
+    ) {
+      return db.sequelize.transaction((t: Transaction) => {
+        return db.Post.create(input, { transaction: t });
+      })
+    },
+    updatePost(
+      parent,
+      { id, input },
+      { db }: { db: DbConnetion },
+      info: GraphQLResolveInfo
+    ) {
+      id = parseInt(id);
+      return db.sequelize.transaction((t: Transaction) => {
+        return db.Post.findById(id)
+          .then((post: PostInstance) => {
+            if (!post) throw new Error(`Post with id ${id} not found!`);
+            return post.update(input, { transaction: t });
+          })
+      })
+    },
+    deletePost(
+      parent,
+      { id },
+      { db }: { db: DbConnetion },
+      info: GraphQLResolveInfo
+    ) {
+      id = parseInt(id);
+      return db.sequelize.transaction((t: Transaction) => {
+        return db.Post.findById(id)
+          .then((post: PostInstance) => {
+            if (!post) throw new Error(`Post with id ${id} not found!`);
+            return post.destroy({ transaction: t })
+              .then(post => !!post);
+          })
+      })
+    },
+  }
 };
