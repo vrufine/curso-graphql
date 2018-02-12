@@ -5,7 +5,20 @@ import { DbConnetion } from "../../../interfaces/DbConnectionInterface";
 import { UserInstance } from "../../../models/UserModel";
 
 export const userResolvers = {
-  User: {},
+  User: {
+    posts(
+      user: UserInstance,
+      { first = 10, offset = 0 },
+      { db }: { db: DbConnetion },
+      info: GraphQLResolveInfo
+    ) {
+      return db.Post.findAll({
+        where: { author: user.get('id') },
+        limit: first,
+        offset
+      });
+    }
+  },
   Query: {
     users(
       parent,
