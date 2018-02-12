@@ -34,7 +34,9 @@ export const commentResolvers = {
     ) {
       postId = parseInt(postId);
       return db.Comment.findAll({
-        where: { post: postId },
+        where: {
+          post: postId
+        },
         limit: first,
         offset
       }).catch(handleError);
