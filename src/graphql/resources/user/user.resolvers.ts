@@ -3,6 +3,7 @@ import { Transaction } from "sequelize";
 
 import { DbConnetion } from "../../../interfaces/DbConnectionInterface";
 import { UserInstance } from "../../../models/UserModel";
+import { handleError } from "../../../utils/utils";
 
 export const userResolvers = {
   User: {
@@ -16,7 +17,7 @@ export const userResolvers = {
         where: { author: user.get('id') },
         limit: first,
         offset
-      });
+      }).catch(handleError);
     }
   },
   Query: {
@@ -29,7 +30,7 @@ export const userResolvers = {
       return db.User.findAll({
         limit: first,
         offset
-      });
+      }).catch(handleError);
     },
     user(
       parent,
@@ -42,7 +43,7 @@ export const userResolvers = {
         .then((user: UserInstance) => {
           if (!user) throw new Error(`User with id ${id} not found!`);
           return user;
-        });
+        }).catch(handleError);
     }
   },
   Mutation: {
@@ -54,7 +55,7 @@ export const userResolvers = {
     ) {
       return db.sequelize.transaction((t: Transaction) => {
         return db.User.create(input, { transaction: t });
-      });
+      }).catch(handleError);
     },
     updateUser(
       parent,
@@ -69,7 +70,7 @@ export const userResolvers = {
             if (!user) throw new Error(`User with id ${id} not found!`);
             return user.update(input, { transaction: t });
           });
-      });
+      }).catch(handleError);
     },
     updateUserPassword(
       parent,
@@ -85,7 +86,7 @@ export const userResolvers = {
             return user.update(input, { transaction: t })
               .then((user: UserInstance) => !!user);
           });
-      });
+      }).catch(handleError);
     },
     deleteUser(
       parent,
@@ -101,7 +102,7 @@ export const userResolvers = {
             return user.destroy({ transaction: t })
               .then(user => !!user);
           });
-      });
+      }).catch(handleError);
     },
   },
 };

@@ -2,6 +2,7 @@ import { GraphQLResolveInfo } from "graphql";
 import { DbConnetion } from "../../../interfaces/DbConnectionInterface";
 import { PostInstance } from "../../../models/PostModel";
 import { Transaction } from "sequelize";
+import { handleError } from "../../../utils/utils";
 
 export const postResolvers = {
   Post: {
@@ -11,7 +12,8 @@ export const postResolvers = {
       { db }: { db: DbConnetion },
       info: GraphQLResolveInfo
     ) {
-      return db.User.findById(post.get('author'));
+      return db.User.findById(post.get('author'))
+        .catch(handleError);
     },
     comments(
       post,
@@ -23,7 +25,7 @@ export const postResolvers = {
         where: { post: post.get('id') },
         limit: first,
         offset
-      });
+      }).catch(handleError);
     }
   },
   Query: {
@@ -36,7 +38,7 @@ export const postResolvers = {
       return db.Post.findAll({
         limit: first,
         offset
-      });
+      }).catch(handleError);
     },
     post(
       parent,
@@ -49,7 +51,7 @@ export const postResolvers = {
         .then((post: PostInstance) => {
           if (!post) throw new Error(`Post with id ${id} not found!`);
           return post;
-        });
+        }).catch(handleError);
     }
   },
   Mutation: {
@@ -61,7 +63,7 @@ export const postResolvers = {
     ) {
       return db.sequelize.transaction((t: Transaction) => {
         return db.Post.create(input, { transaction: t });
-      })
+      }).catch(handleError);
     },
     updatePost(
       parent,
@@ -75,8 +77,8 @@ export const postResolvers = {
           .then((post: PostInstance) => {
             if (!post) throw new Error(`Post with id ${id} not found!`);
             return post.update(input, { transaction: t });
-          })
-      })
+          });
+      }).catch(handleError);
     },
     deletePost(
       parent,
@@ -91,8 +93,8 @@ export const postResolvers = {
             if (!post) throw new Error(`Post with id ${id} not found!`);
             return post.destroy({ transaction: t })
               .then(post => !!post);
-          })
-      })
+          });
+      }).catch(handleError);
     },
   }
 };
