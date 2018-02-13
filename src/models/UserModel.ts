@@ -68,7 +68,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes):
     }
   });
   User.prototype.isPassword = (encodedPassword: string, password: string): boolean => {
-    return compareSync(encodedPassword, password);
+    return compareSync(password, encodedPassword);
   }
   return User;
 };
