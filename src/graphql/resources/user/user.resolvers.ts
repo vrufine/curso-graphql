@@ -5,6 +5,10 @@ import { DbConnetion } from "../../../interfaces/DbConnectionInterface";
 import { UserInstance } from "../../../models/UserModel";
 import { handleError } from "../../../utils/utils";
 
+import { compose } from './../../composable/composable.resolver'
+import { authResolver } from "../../composable/auth.resolver";
+import { verifyTokenResolver } from "../../composable/verify-token.resolver";
+
 export const userResolvers = {
   User: {
     posts(
@@ -21,17 +25,17 @@ export const userResolvers = {
     }
   },
   Query: {
-    users(
+    users: compose(authResolver, verifyTokenResolver)((
       parent,
       { first = 10, offset = 0 },
       { db }: { db: DbConnetion },
       info: GraphQLResolveInfo
-    ) {
+    ) => {
       return db.User.findAll({
         limit: first,
         offset
       }).catch(handleError);
-    },
+    }),
     user(
       parent,
       { id },
