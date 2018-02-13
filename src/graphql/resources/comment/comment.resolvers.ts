@@ -1,31 +1,38 @@
 import { GraphQLResolveInfo } from "graphql";
 import { Transaction } from "sequelize";
 
-import { DbConnetion } from "../../../interfaces/DbConnectionInterface";
 import { CommentInstance } from "../../../models/CommentModel";
-import { handleError, throwError } from "../../../utils/utils";
+
+import { AuthUser } from "../../../interfaces/AuthUserInterface";
+import { DataLoaders } from "../../../interfaces/DataLoadersInterface";
+import { DbConnetion } from "../../../interfaces/DbConnectionInterface";
+import { ResolverContext } from "../../../interfaces/ResolverContextInterface";
+
 import { compose } from "../../composable/composable.resolver";
 import { authResolvers } from "../../composable/auth.resolver";
-import { AuthUser } from "../../../interfaces/AuthUserInterface";
+
+import { handleError, throwError } from "../../../utils/utils";
 
 export const commentResolvers = {
   Comment: {
     user: (
       comment,
       args,
-      { db }: { db: DbConnetion },
+      { db, dataloaders: { userLoader } }: { db: DbConnetion, dataloaders: DataLoaders },
       info: GraphQLResolveInfo
     ) => {
-      return db.User.findById(comment.get('user'))
+      return userLoader
+      .load({ key: comment.get('user'), info })
         .catch(handleError);
     },
     post: (
       comment,
       args,
-      { db }: { db: DbConnetion },
+      { db, dataloaders: { postLoader } }: { db: DbConnetion, dataloaders: DataLoaders },
       info: GraphQLResolveInfo
     ) => {
-      return db.Post.findById(comment.get('post'))
+      return postLoader
+        .load({ key: comment.get('post'), info })
         .catch(handleError);
     }
   },
@@ -33,16 +40,15 @@ export const commentResolvers = {
     commentsByPost: (
       parent,
       { postId, first = 10, offset = 10 },
-      { db }: { db: DbConnetion },
+      context: ResolverContext,
       info: GraphQLResolveInfo
     ) => {
       postId = parseInt(postId);
-      return db.Comment.findAll({
-        where: {
-          post: postId
-        },
+      return context.db.Comment.findAll({
+        where: { post: postId },
         limit: first,
-        offset
+        offset,
+        attributes: context.requestedFields.getFields(info)
       }).catch(handleError);
     }
   },
