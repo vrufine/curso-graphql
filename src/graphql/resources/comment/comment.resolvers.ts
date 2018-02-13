@@ -22,7 +22,7 @@ export const commentResolvers = {
       info: GraphQLResolveInfo
     ) => {
       return userLoader
-        .load(comment.get('user'))
+      .load({ key: comment.get('user'), info })
         .catch(handleError);
     },
     post: (
@@ -32,7 +32,7 @@ export const commentResolvers = {
       info: GraphQLResolveInfo
     ) => {
       return postLoader
-        .load(comment.get('post'))
+        .load({ key: comment.get('post'), info })
         .catch(handleError);
     }
   },

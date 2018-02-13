@@ -23,7 +23,7 @@ export const postResolvers = {
       info: GraphQLResolveInfo
     ) => {
       return userLoader
-        .load(post.get('author'))
+        .load({ key: post.get('author'), info })
         .catch(handleError);
     },
     comments: (
