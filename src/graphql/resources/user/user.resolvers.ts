@@ -48,7 +48,19 @@ export const userResolvers = {
           throwError(!user, `User with id ${id} not found!`);
           return user;
         }).catch(handleError);
-    }
+    },
+    currentUser: compose(...authResolvers)((
+      parent,
+      args,
+      { db, authUser }: { db: DbConnetion, authUser: AuthUser },
+      info: GraphQLResolveInfo
+    ) => {
+      return db.User.findById(authUser.id)
+        .then((user: UserInstance) => {
+          throwError(!user, `User with id ${authUser.id} not found!`);
+          return user;
+        }).catch(handleError);
+    })
   },
   Mutation: {
     createUser: (
