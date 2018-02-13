@@ -1,13 +1,17 @@
 import { GraphQLResolveInfo } from "graphql";
 import { Transaction } from "sequelize";
 
-import { DbConnetion } from "../../../interfaces/DbConnectionInterface";
 import { CommentInstance } from "../../../models/CommentModel";
-import { handleError, throwError } from "../../../utils/utils";
-import { compose } from "../../composable/composable.resolver";
-import { authResolvers } from "../../composable/auth.resolver";
+
 import { AuthUser } from "../../../interfaces/AuthUserInterface";
 import { DataLoaders } from "../../../interfaces/DataLoadersInterface";
+import { DbConnetion } from "../../../interfaces/DbConnectionInterface";
+import { ResolverContext } from "../../../interfaces/ResolverContextInterface";
+
+import { compose } from "../../composable/composable.resolver";
+import { authResolvers } from "../../composable/auth.resolver";
+
+import { handleError, throwError } from "../../../utils/utils";
 
 export const commentResolvers = {
   Comment: {
@@ -36,16 +40,15 @@ export const commentResolvers = {
     commentsByPost: (
       parent,
       { postId, first = 10, offset = 10 },
-      { db }: { db: DbConnetion },
+      context: ResolverContext,
       info: GraphQLResolveInfo
     ) => {
       postId = parseInt(postId);
-      return db.Comment.findAll({
-        where: {
-          post: postId
-        },
+      return context.db.Comment.findAll({
+        where: { post: postId },
         limit: first,
-        offset
+        offset,
+        attributes: context.requestedFields.getFields(info)
       }).catch(handleError);
     }
   },
