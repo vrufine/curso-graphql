@@ -18,12 +18,14 @@ export const tokenResolvers = {
         attributes: ['id', 'password']
       }).then((user: UserInstance) => {
         const errorMessage = 'Unauthorized, wrong email or password!'
-        if (!user || user.isPassword(user.get('password'), password)) {
+        if (!user || !user.isPassword(user.get('password'), password)) {
           throw new Error(errorMessage);
         }
         const payload = { sub: user.get('id') }
         return {
-          token: jwt.sign(payload, JWT_SECRET)
+          token: jwt.sign(payload, JWT_SECRET, {
+            expiresIn: '1h'
+          })
         }
       })
     }
