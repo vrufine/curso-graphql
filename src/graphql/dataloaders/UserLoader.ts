@@ -1,7 +1,7 @@
 import { UserModel, UserInstance } from "../../models/UserModel";
 
 export class UserLoader {
-  static batchUsers(User: UserModel, ids: Array<number>): Promise<Array<UserInstance>> {
+  static batchUsers(User: UserModel, ids: number[]): Promise<UserInstance[]> {
     return Promise.resolve(
       User.findAll({
         where: {
