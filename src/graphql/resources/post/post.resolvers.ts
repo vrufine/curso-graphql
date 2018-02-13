@@ -1,3 +1,4 @@
+import * as graphqlFields from 'graphql-fields';
 import { GraphQLResolveInfo } from "graphql";
 import { Transaction } from "sequelize";
 
@@ -43,7 +44,8 @@ export const postResolvers = {
     ) => {
       return db.Post.findAll({
         limit: first,
-        offset
+        offset,
+        attributes: Object.keys(graphqlFields(info))
       }).catch(handleError);
     },
     post: (
