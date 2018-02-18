@@ -77,6 +77,34 @@ describe('Post', () => {
               expect(postsList[0]).to.have.keys('title', 'content', 'photo');
             }).catch(handleError);
         })
+        it('should paginate a list of Posts', () => {
+          const body = {
+            query: `
+              query getPaginatedPosts($first: Int, $offset: Int) {
+                posts (first: $first, offset: $offset) {
+                  id
+                  title
+                }
+              }
+            `,
+            variables: {
+              first: 2,
+              offset: 1
+            }
+          };
+          return chai.request(app)
+            .post('/graphql')
+            .set('content-type', 'application/json')
+            .send(JSON.stringify(body))
+            .then(res => {
+              const postList = res.body.data.posts;
+              expect(res.body.data).to.be.an('object');
+              expect(postList).to.be.an('array').length(2);
+              expect(postList[0]).to.have.keys('id', 'title');
+              expect(postList[0]).to.not.have.keys('content', 'comments', 'photo', 'createdAt', 'updatedAt', 'author');
+              expect(postList[0].title).eq('Second post');
+            }).catch(handleError);
+        })
       })
       describe('post', () => {
         it('should a single Post with its author', () => {
