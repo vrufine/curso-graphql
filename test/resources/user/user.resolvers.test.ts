@@ -323,6 +323,23 @@ describe('User', () => {
               expect(res.body.data.deleteUser).to.be.true;
             }).catch(handleError);
         })
+        it('should return an error if token is not provided', () => {
+          const body = {
+            query: `
+              mutation {
+                deleteUser
+              }
+            `
+          };
+          return chai.request(app)
+            .post('/graphql')
+            .set('content-type', 'application/json')
+            .send(JSON.stringify(body))
+            .then(res => {
+              expect(res.body.errors[0].message).to.be.equal('Unauthorized! Token not provided!');
+              expect(res.body.data.deleteUser).to.be.null;
+            }).catch(handleError);
+        })
       })
     })
   })
