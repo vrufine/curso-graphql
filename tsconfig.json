@@ -3,7 +3,8 @@
   "compilerOptions": {
     "target": "es6",
     "lib": [
-      "esnext"
+      "esnext",
+      "dom"
     ],
     "module": "commonjs"
   },
