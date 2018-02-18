@@ -10,10 +10,11 @@
     "coverage": "nyc --extension .ts --include 'src/**/*.ts' --reporter html npm test",
     "clusters": "NODE_ENV=development PORT=8080 node dist/clusters",
     "build": "npm run gulp build",
-    "start": "npm run build && npm run clusters"
+    "start": "npm run build && npm run clusters",
+    "pipelines": "NODE_ENV=pipelines JWT_SECRET=pipelines_secret mocha"
   },
   "keywords": [],
-  "author": "",
+  "author": "Vinicius Rufine",
   "license": "ISC",
   "devDependencies": {
     "@types/bcryptjs": "^2.4.1",
