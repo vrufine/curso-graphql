@@ -2,13 +2,15 @@ import * as DataLoader from 'dataloader';
 
 import { DbConnetion } from "../../interfaces/DbConnectionInterface";
 import { DataLoaders } from "../../interfaces/DataLoadersInterface";
+import { DataLoaderParam } from '../../interfaces/DataLoaderParamInterface';
 
 import { UserInstance } from '../../models/UserModel';
 import { PostInstance } from '../../models/PostModel';
+
 import { UserLoader } from './UserLoader';
 import { PostLoader } from './PostLoader';
+
 import { RequestedFields } from '../ast/RequestedFields';
-import { DataLoaderParam } from '../../interfaces/DataLoaderParamInterface';
 
 export class DataLoaderFactory {
   constructor(
