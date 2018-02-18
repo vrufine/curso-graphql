@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "NODE_ENV=development JWT_SECRET=iron_man node_modules/.bin/nodemon --delay 5 ./dist/index.js",
     "gulp": "node_modules/.bin/gulp",
-    "test": "NODE_ENV=test JWT_SECRET=test_secret mocha"
+    "test": "NODE_ENV=test JWT_SECRET=test_secret mocha",
+    "coverage": "nyc --extension .ts --include 'src/**/*.ts' --reporter html npm test"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +32,7 @@
     "gulp-typescript": "^4.0.1",
     "mocha": "^5.0.1",
     "nodemon": "^1.14.12",
+    "nyc": "^11.4.1",
     "ts-node": "^4.1.0",
     "typescript": "^2.7.1"
   },
