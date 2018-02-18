@@ -1,5 +1,6 @@
 import * as express from 'express';
 import * as graphqlHTTP from 'express-graphql';
+import * as cors from 'cors';
 
 import db from './models';
 import schema from './graphql/schema';
@@ -22,6 +23,13 @@ class App {
     this.middleware();
   }
   private middleware() {
+    this.express.use(cors({
+      origin: '*',
+      methods: ['GET', 'POST'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'Accept-Encoding'],
+      preflightContinue: false,
+      optionsSuccessStatus: 204
+    }));
     this.express.use('/graphql',
       extractJwtMiddleware(),
       (req: express.Request, res: express.Response, next: express.NextFunction) => {
