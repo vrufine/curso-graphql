@@ -7,7 +7,10 @@
     "dev": "NODE_ENV=development JWT_SECRET=iron_man node_modules/.bin/nodemon --delay 5 ./dist/index.js",
     "gulp": "node_modules/.bin/gulp",
     "test": "NODE_ENV=test JWT_SECRET=test_secret mocha",
-    "coverage": "nyc --extension .ts --include 'src/**/*.ts' --reporter html npm test"
+    "coverage": "nyc --extension .ts --include 'src/**/*.ts' --reporter html npm test",
+    "clusters": "NODE_ENV=development PORT=8080 node dist/clusters",
+    "build": "npm run gulp build",
+    "start": "npm run build && npm run clusters"
   },
   "keywords": [],
   "author": "",
