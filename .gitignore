@@ -1,6 +1,7 @@
+.vscode
 dist
 
-# Created by https://www.gitignore.io/api/node,visualstudiocode
+# Created by https://www.gitignore.io/api/node
 
 ### Node ###
 # Logs
@@ -63,13 +64,5 @@ typings/
 .env
 
 
-### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history
 
-
-# End of https://www.gitignore.io/api/node,visualstudiocode
+# End of https://www.gitignore.io/api/node
