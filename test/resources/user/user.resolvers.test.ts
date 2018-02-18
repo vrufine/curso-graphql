@@ -91,7 +91,7 @@ describe('User', () => {
         });
       })
       describe('user', () => {
-        it('should return one User', () => {
+        it('should return a single User', () => {
           const body = {
             query: `
               query getUserById($id: ID!) {
