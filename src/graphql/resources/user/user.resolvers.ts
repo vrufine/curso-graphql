@@ -12,6 +12,7 @@ import { ResolverContext } from "../../../interfaces/ResolverContextInterface";
 
 import { RequestedFields } from "../../ast/RequestedFields";
 import { handleError, throwError } from "../../../utils/utils";
+import { simpleComposableResolver } from "../../composable/log.resolver";
 
 
 export const userResolvers = {
@@ -31,7 +32,7 @@ export const userResolvers = {
     }
   },
   Query: {
-    users: (
+    users: compose(simpleComposableResolver)((
       parent,
       { first = 10, offset = 0 },
       context: ResolverContext,
@@ -42,7 +43,7 @@ export const userResolvers = {
         offset,
         attributes: context.requestedFields.getFields(info, { keep: ['id'], exclude: ['posts'] })
       }).catch(handleError);
-    },
+    }),
     user: (
       parent,
       { id },

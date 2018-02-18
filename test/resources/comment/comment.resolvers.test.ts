@@ -75,9 +75,7 @@ describe('Comment', () => {
               }
             `,
             variables: {
-              postId,
-              first: 10,
-              offset: 0
+              postId: postId
             }
           };
           return chai.request(app)
@@ -85,13 +83,13 @@ describe('Comment', () => {
             .set('content-type', 'application/json')
             .send(JSON.stringify(body))
             .then(res => {
-              const commentList = res.body.data.commentsByPost;
+              const commentsList = res.body.data.commentsByPost;
               expect(res.body.data).to.be.an('object');
-              expect(commentList).to.be.an('array');
-              expect(commentList[0]).to.have.keys('comment', 'user', 'post');
-              expect(commentList[0]).to.not.have.keys('id', 'createdAt', 'updatedAt');
-              expect(parseInt(commentList[0].user.id)).to.equal(userId);
-              expect(parseInt(commentList[0].post.id)).to.equal(postId);
+              expect(commentsList).to.be.an('array');
+              expect(commentsList[0]).to.have.keys('comment', 'user', 'post');
+              expect(commentsList[0]).to.not.have.keys('id', 'createdAt', 'updatedAt');
+              expect(parseInt(commentsList[0].user.id)).to.equal(userId);
+              expect(parseInt(commentsList[0].post.id)).to.equal(postId);
             }).catch(handleError);
         })
         it('should paginate a list of Comments', () => {

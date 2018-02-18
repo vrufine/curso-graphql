@@ -39,7 +39,7 @@ export const commentResolvers = {
   Query: {
     commentsByPost: compose()((
       parent,
-      { postId, first = 10, offset = 10 },
+      { postId, first = 10, offset = 0 },
       context: ResolverContext,
       info: GraphQLResolveInfo
     ) => {

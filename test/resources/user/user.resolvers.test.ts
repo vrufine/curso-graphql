@@ -45,6 +45,9 @@ describe('User', () => {
                 users {
                   name
                   email
+                  posts {
+                    id
+                  }
                 }
               }
             `
@@ -57,8 +60,8 @@ describe('User', () => {
               const usersList = res.body.data.users;
               expect(res.body.data).to.be.an('object');
               expect(usersList).to.be.an('array');
-              expect(usersList[0]).to.not.have.keys('id', 'photo', 'createdAt', 'updatedAt', 'posts');
-              expect(usersList[0]).to.have.keys('name', 'email');
+              expect(usersList[0]).to.not.have.keys('id', 'photo', 'createdAt', 'updatedAt');
+              expect(usersList[0]).to.have.keys('name', 'email', 'posts');
             }).catch(handleError);
         })
         it('should paginate a list of Users', () => {
@@ -169,6 +172,34 @@ describe('User', () => {
               expect(res.body.errors).to.be.an('array');
               expect(res.body).to.have.keys('data', 'errors');
               expect(res.body.errors[0].message).to.eq('Error: User with id -1 not found!');
+            }).catch(handleError);
+        })
+      })
+      describe('currentUser', () => {
+        it('should return the token\'s owner User', () => {
+          const body = {
+            query: `
+              query {
+                currentUser {
+                  name
+                  email
+                }
+              }
+            `
+          };
+          return chai.request(app)
+            .post('/graphql')
+            .set('content-type', 'application/json')
+            .set('authorization', `Bearer ${token}`)
+            .send(body)
+            .then(res => {
+              const currentUser = res.body.data.currentUser;
+              expect(res.body.data).to.be.an('object');
+              expect(currentUser).to.be.an('object');
+              expect(currentUser).to.have.keys('name', 'email');
+              expect(currentUser).to.not.have.keys('id', 'photo', 'createdAt', 'updatedAt', 'posts');
+              expect(currentUser.name).to.eq('Vinícius Rufine');
+              expect(currentUser.email).to.eq('vinicius.rufine@atualcs.com.br');
             }).catch(handleError);
         })
       })
