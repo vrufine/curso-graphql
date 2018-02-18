@@ -23,7 +23,8 @@ if (!db) {
   );
   fs.readdirSync(__dirname)
     .filter((file: string) => {
-      return (file.indexOf('.') !== 0) && (file.slice(-3) === '.js') && (file !== basename)
+      const fileExtension = file.slice(-3);
+      return (file.indexOf('.') !== 0) && ((fileExtension === '.js') || (fileExtension === '.ts')) && (file !== basename)
     })
     .forEach((file: string) => {
       const model = sequelize.import(path.join(__dirname, file));

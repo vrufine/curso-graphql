@@ -37,9 +37,9 @@ export const commentResolvers = {
     }
   },
   Query: {
-    commentsByPost: (
+    commentsByPost: compose()((
       parent,
-      { postId, first = 10, offset = 10 },
+      { postId, first = 10, offset = 0 },
       context: ResolverContext,
       info: GraphQLResolveInfo
     ) => {
@@ -48,9 +48,9 @@ export const commentResolvers = {
         where: { post: postId },
         limit: first,
         offset,
-        attributes: context.requestedFields.getFields(info)
+        attributes: context.requestedFields.getFields(info, {keep: undefined, exclude: undefined})
       }).catch(handleError);
-    }
+    })
   },
   Mutation: {
     createComment: compose(...authResolvers)((
