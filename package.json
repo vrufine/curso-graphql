@@ -8,7 +8,7 @@
     "gulp": "node_modules/.bin/gulp",
     "test": "NODE_ENV=test JWT_SECRET=test_secret mocha",
     "coverage": "nyc --extension .ts --include 'src/**/*.ts' --reporter html npm test",
-    "clusters": "NODE_ENV=development PORT=8080 node dist/clusters",
+    "clusters": "NODE_ENV=production PORT=8080 node dist/clusters",
     "build": "npm run gulp build",
     "start": "npm run build && npm run clusters",
     "pipelines": "NODE_ENV=pipelines JWT_SECRET=pipelines_secret mocha"
